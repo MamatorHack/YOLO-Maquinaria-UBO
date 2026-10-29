@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 import yaml
 
-from src.yolo_ubo import box_iou, match_boxes, prepare_dataset, count_dataset, check_exact_leakage, select_model, test_once
+from src.yolo_ubo import box_iou, match_boxes, prepare_dataset, count_dataset, check_exact_leakage, select_model, test_once as run_test_once
 
 
 def test_iou():
@@ -54,4 +54,4 @@ def test_selection_locked(tmp_path):
 
 def test_test_requires_selection(tmp_path):
     with pytest.raises(RuntimeError):
-        test_once("nonexistent.pt","nonexistent.yaml",output=tmp_path/"results/test_metrics.json")
+        run_test_once("nonexistent.pt","nonexistent.yaml",output=tmp_path/"results/test_metrics.json")
