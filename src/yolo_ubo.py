@@ -48,11 +48,18 @@ def prepare_dataset(yaml_path: str | Path, output_dir: str | Path, selected: tup
         image_dir = Path(data[key])
         if not image_dir.is_absolute():
             image_dir = (base / image_dir).resolve()
-        if not image_dir.exists():
-            # Algunos exports Roboflow proporcionan 'train/images' con path heredado.
-            image_dir = (yaml_path.parent / data[key]).resolve()
         if not image_dir.is_dir():
-            raise FileNotFoundError(image_dir)
+            # Roboflow exporta a veces ../train/images aunque el YAML está en la raíz del ZIP.
+            # Probamos primero la raíz de extracción antes de declarar el split ausente.
+            relative = str(data[key]).replace("\\", "/")
+            candidates = [
+                (yaml_path.parent / relative).resolve(),
+                (yaml_path.parent / relative.removeprefix("../")).resolve(),
+                (yaml_path.parent / Path(relative).name).resolve(),
+            ]
+            image_dir = next((candidate for candidate in candidates if candidate.is_dir()), image_dir)
+        if not image_dir.is_dir():
+            raise FileNotFoundError(f"Split {dst_split}: {image_dir}")
         dest_images = output_dir / dst_split / "images"
         dest_labels = output_dir / dst_split / "labels"
         dest_images.mkdir(parents=True, exist_ok=True)
