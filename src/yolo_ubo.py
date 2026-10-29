@@ -179,7 +179,7 @@ def train_stage(model_weights, data_yaml, name, epochs, imgsz, batch, freeze, lr
             "results_csv": str(Path(model.trainer.save_dir) / "results.csv")}
 
 
-def evaluate(weights, data_yaml, split="val", imgsz=416, conf=0.25):
+def evaluate(weights, data_yaml, split="val", imgsz=416, conf=0.001):
     from ultralytics import YOLO
     metrics = YOLO(str(weights)).val(data=str(data_yaml), split=split,
                                    imgsz=imgsz, conf=conf, device=0, plots=True)
