@@ -9,10 +9,11 @@ import html
 import json
 import re
 from pathlib import Path
+import os
 import markdown
 from PIL import Image, ImageOps, ImageDraw
 
-ROOT = Path("/content/YOLO-Maquinaria-UBO")
+ROOT = Path(os.environ.get("YOLO_UBO_ROOT", "/content/YOLO-Maquinaria-UBO"))
 DOC = ROOT / "docs/INFORME_TECNICO_E03_PARA_PDF.md"
 OUT = ROOT / "report"
 OUT.mkdir(parents=True, exist_ok=True)
