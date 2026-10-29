@@ -28,12 +28,25 @@ Los ZIP de ejemplos del laboratorio (imágenes de películas y video `video_prue
 
 GitHub Actions ejecuta las pruebas Python sin GPU y valida la estructura del notebook en `[.github/workflows/validate.yml](.github/workflows/validate.yml)`. Estas pruebas **no sustituyen** la ejecución real del entrenamiento en Colab ni la inspección manual de fugas de datos.
 
+## Dataset verificado y corregido — importante
+
+La versión 2 de Excavators contiene **2 656 imágenes / 3 881 cajas** con tres clases correctas, pero **la partición original tiene fugas visuales** (fotogramas de un mismo video en distintos splits y fotos casi idénticas con otros nombres). Se generó una versión controlada **antes de cualquier entrenamiento**: **Train 2 406 / Validation 144 / Test 82**, documentada en [Auditoría del dataset](docs/AUDITORIA_DATASET.md).
+
+**Usar para Colab:** `Excavators.v2-UBO-sin-fugas-evidentes.yolov8.zip` (el archivo corregido entregado en el chat) y **NO** el ZIP Roboflow original. El notebook detiene la ejecución si no encuentra `LIMPIEZA_DATOS.json`. Para reproducir la limpieza desde la exportación original:
+
+```bash
+pip install numpy Pillow
+python scripts/preparar_dataset_sin_fugas.py Excavators.v2-raw-images_416by416.yolov8.zip Excavators.v2-UBO-sin-fugas-evidentes.yolov8.zip
+```
+
+El dataset no se sube a GitHub ni se entrega al profesor, que pide solo la fuente, versión y clases. Una auditoría automática reduce riesgos de fuga pero no reemplaza la inspección visual manual ni demuestra independencia absoluta.
+
 ## Inicio rápido en Google Colab (GPU T4)
 
-1. Descargar el ZIP en formato **YOLO** desde Roboflow Universe (versión 2). No subirlo al repositorio.
+1. Descargar la exportación original **YOLOv8** desde Roboflow Universe (versión 2), y ejecutar el script de limpieza anterior; o usar directamente el ZIP corregido del chat. No subir ninguno al repositorio.
 2. Abrir `notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb` en Google Colab.
 3. Elegir **Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU**.
-4. Ejecutar las celdas en orden. Cuando se solicite, subir el ZIP del dataset.
+4. Ejecutar las celdas en orden. Cuando se solicite, subir **solo el ZIP corregido** del dataset.
 5. Al terminar, descargar inmediatamente el ZIP de resultados generado y respaldarlo en Google Drive: **/content se pierde al terminar la sesión**.
 6. Subir fotografías externas a `external/images/` y al menos un video externo a `external/videos/` para probar el detector. Para Evaluación 04 se necesitarán **dos videos de ≥10 segundos** y fuera del dataset.
 
