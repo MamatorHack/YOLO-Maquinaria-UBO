@@ -32,7 +32,7 @@ GitHub Actions ejecuta las pruebas Python sin GPU y valida la estructura del not
 
 La versión 2 de Excavators contiene **2 656 imágenes / 3 881 cajas** con tres clases correctas, pero **la partición original tiene fugas visuales** (fotogramas de un mismo video en distintos splits y fotos casi idénticas con otros nombres). Se generó una versión controlada **antes de cualquier entrenamiento**: **Train 2 406 / Validation 144 / Test 82**, documentada en [Auditoría del dataset](docs/AUDITORIA_DATASET.md).
 
-**Usar para Colab:** `Excavators.v2-UBO-sin-fugas-evidentes.yolov8.zip` (el archivo corregido entregado en el chat) y **NO** el ZIP Roboflow original. El notebook detiene la ejecución si no encuentra `LIMPIEZA_DATOS.json`. Para reproducir la limpieza desde la exportación original:
+**Usar para Colab:** se puede subir **el ZIP original de Roboflow v2**, porque el notebook aplica automáticamente la limpieza reproducible **antes del entrenamiento** y guarda el registro `LIMPIEZA_DATOS.json`. También acepta el ZIP corregido previamente. No hace falta descargar archivos grandes desde ChatGPT. Para reproducir la limpieza manualmente:
 
 ```bash
 pip install numpy Pillow
@@ -43,10 +43,10 @@ El dataset no se sube a GitHub ni se entrega al profesor, que pide solo la fuent
 
 ## Inicio rápido en Google Colab (GPU T4)
 
-1. Descargar la exportación original **YOLOv8** desde Roboflow Universe (versión 2), y ejecutar el script de limpieza anterior; o usar directamente el ZIP corregido del chat. No subir ninguno al repositorio.
+1. Descargar la exportación original **YOLOv8** desde Roboflow Universe (versión 2) y conservarla; el notebook la limpia automáticamente en Colab. No subir el dataset a GitHub.
 2. Abrir `notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb` en Google Colab.
 3. Elegir **Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU**.
-4. Ejecutar las celdas en orden. Cuando se solicite, subir **solo el ZIP corregido** del dataset.
+4. Ejecutar las celdas en orden. Cuando se solicite, subir el **ZIP Roboflow v2 original** o el ZIP corregido; si el original ya está en `/content`, Colab lo reutiliza sin volver a subirlo.
 5. Al terminar, descargar inmediatamente el ZIP de resultados generado y respaldarlo en Google Drive: **/content se pierde al terminar la sesión**.
 6. Subir fotografías externas a `external/images/` y al menos un video externo a `external/videos/` para probar el detector. Para Evaluación 04 se necesitarán **dos videos de ≥10 segundos** y fuera del dataset.
 
