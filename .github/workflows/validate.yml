@@ -33,3 +33,6 @@ jobs:
           PY
       - name: Ejecutar tests
         run: python -m pytest -q tests
+
+      - name: Verificar sintaxis de scripts
+        run: python -m py_compile scripts/*.py src/*.py
