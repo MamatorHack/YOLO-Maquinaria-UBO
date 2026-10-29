@@ -10,6 +10,7 @@ from __future__ import annotations
 from pathlib import Path
 import html
 import logging
+import re
 
 from markdown import markdown
 from PIL import Image
@@ -44,7 +45,7 @@ def make_html(font_size=10.0) -> str:
     heading = "Detección automática de maquinaria de construcción"
     title_html = markdown(title_part, extensions=["tables", "fenced_code"])
     main_html = markdown(contents, extensions=["tables", "fenced_code"])
-    figure = '<p><img alt="Figura 3. Cajas reales y predicciones sobre imágenes Test" src="../assets/figures/test_gallery.png"></p>'
+    figure_pattern = r'<p>\\s*<img\\b[^>]*src="\\.\\./assets/figures/test_gallery\\.png"[^>]*>\\s*</p>'
     replacement = """
         <div class="gallery">
           <div><img alt="Confusión clase" src="../assets/figures/test_confusion.jpg">
@@ -55,9 +56,9 @@ def make_html(font_size=10.0) -> str:
           <small>Ejemplo representativo de detección correcta de camión.</small></div>
         </div>
     """
-    if figure not in main_html:
-        raise RuntimeError("No se encontró la galería prevista en el contenido del informe")
-    main_html = main_html.replace(figure, replacement)
+    main_html, count = re.subn(figure_pattern, lambda m: replacement, main_html, flags=re.S)
+    if count != 1:
+        raise RuntimeError(f"Se esperaban 1 galería, se encontraron {count}")
 
     css = f"""
     @page {{
