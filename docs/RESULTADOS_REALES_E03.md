@@ -72,11 +72,25 @@ Comparado con Validation: mAP50-95 +0,003637; mAP50 −0,004890; recall −0,030
 - En otra imagen de una cargadora, aparece una predicción `dump truck` de confianza 0,26 sobre parte de la máquina, una posible falsa detección.
 - **Pendiente:** seleccionar y justificar un objeto realmente perdido (FN) y documentar por separado una caja mal ubicada o confusión, incluyendo nombre de imagen y contexto. No declarar los tres casos completos hasta identificar la evidencia específica.
 
+## Demostración externa documentada — Parte 12
+
+**Fotografías externas (Pexels, capturas aportadas por el equipo):**
+- `pexels-rohanbatra-40537857.jpg`: una cargadora `wheel loader` detectada con confianza **0,42**. Detección correcta pero con confianza relativamente baja.
+- `pexels-celalkeser-36506004.jpg`: el modelo dibujó una caja `EXCAVATORS` con confianza **0,68** alrededor de buena parte del camión y otra `dump truck` con confianza **0,28** sobre la maquinaria del fondo. Este caso ilustra posible confusión, cajas mal localizadas y limitaciones al distinguir maquinaria solapada. Requiere inspección visual para describir con rigor cuál maquinaria está presente en cada caja.
+
+**Video externo:**
+- Original: `16517436_3840_2160_30fps.mp4` (4K, 30 fps, **735 fotogramas ≈24,5 s**).
+- Para evitar saturación RAM en Colab se creó `video_1_720p.mp4` (720p, 10 fps); su inferencia con `stream=True` terminó correctamente **245 fotogramas**.
+- Resultado indicado por Colab: `results/video_1_streaming`. No confundir el video de entrada optimizado con la copia de salida anotada por YOLO.
+- Se observan detecciones `EXCAVATORS` y `dump truck` durante numerosos fotogramas, según los logs aportados; falta comprobar el video renderizado completo para evaluar falsos positivos y pérdidas. **No se reportan métricas de calidad cuantitativas de esta secuencia porque no tiene anotaciones ground-truth.**
+
+**Respaldo:** se verificó la existencia de los tres pesos `transfer_learning.pt`, `fine_tuning.pt` y `modelo_elegido.pt` y se generó `YOLO_E03_resultados.zip` de **459,3 MB** en Colab. El ZIP se ha aportado a la conversación; el notebook ejecutado `.ipynb` debe descargarse también por separado.
+
 ## Faltantes obligatorios antes del informe PDF
 
-- Salidas **en imágenes y al menos un video externos** al dataset (parte 12). Para evaluación 04 se requieren **dos videos externos de ≥10 s**.
+- **Parte 12 completada en Colab:** imágenes externas y un video externo; reunir capturas seleccionadas y comprobar el video anotado. Para Evaluación 04 queda por procesar un segundo video externo de ≥10 s.
 - Registrar los enlaces/autor/licencia de fotos y videos usados y comentar aciertos y errores externos.
-- Descargar el ZIP de resultados con los **tres pesos entrenados**, el notebook `.ipynb` **con salidas** y el PDF final en español.
+- **ZIP de resultados y tres pesos confirmados en Colab.** Pendientes: notebook `.ipynb` **con salidas** descargado y PDF final en español.
 - Incorporar gráficas legibles y tiempos/equipo a las secciones correspondientes del informe (máximo diez páginas, referencias incluidas).
 
 **Nota técnica:** `results.csv` facilitado del fine tuning refleja las **cinco épocas** y su mAP50-95 máximo en época 3. El entrenamiento y la selección ya quedaron hechos; **no repetir Test** para obtener evidencias adicionales.
