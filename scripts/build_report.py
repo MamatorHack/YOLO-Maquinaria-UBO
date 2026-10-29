@@ -45,7 +45,7 @@ def make_html(font_size=10.0) -> str:
     heading = "Detección automática de maquinaria de construcción"
     title_html = markdown(title_part, extensions=["tables", "fenced_code"])
     main_html = markdown(contents, extensions=["tables", "fenced_code"])
-    figure_pattern = r'<p>\\s*<img\\b[^>]*src="\\.\\./assets/figures/test_gallery\\.png"[^>]*>\\s*</p>'
+    figure_pattern = r'<img[^>]*test_gallery[.]png[^>]*>'
     replacement = """
         <div class="gallery">
           <div><img alt="Confusión clase" src="../assets/figures/test_confusion.jpg">
