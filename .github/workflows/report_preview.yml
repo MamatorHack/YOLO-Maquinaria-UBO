@@ -1,0 +1,35 @@
+name: Informe técnico PDF (vista preliminar)
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'docs/INFORME_TECNICO_E03_PARA_PDF.md'
+      - 'scripts/generar_informe_pdf.py'
+      - '.github/workflows/report_preview.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Dependencias de generación PDF
+        run: |
+          python -m pip install -q --upgrade pip
+          python -m pip install -q markdown weasyprint pypdf Pillow matplotlib numpy
+      - name: Crear PDF preliminar
+        env:
+          YOLO_UBO_ROOT: ${{ github.workspace }}
+        run: python scripts/generar_informe_pdf.py
+      - name: Descargar PDF preliminar desde Actions
+        uses: actions/upload-artifact@v4
+        with:
+          name: Informe_E03_YOLO_BORRADOR
+          path: report/*.pdf
+          if-no-files-found: error
