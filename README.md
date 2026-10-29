@@ -1,105 +1,229 @@
-# YOLO Maquinaria UBO — Evaluación 03
+<div align="center">
 
-**Universidad Bernardo O'Higgins · Machine Learning · Evaluación 03 (25 %) · 7 noviembre 2026, 10:10**
+# 🏗️ YOLO Maquinaria UBO
 
-**Equipo:** Mathis Marsault · Julien Martinat · Louis Maillet  
-**Docente:** Dr. Eliecer Peña Ancavil
+### Detección automática de maquinaria de construcción con YOLO26n
 
-> **Estado:** código y protocolo de evaluación preparados. El entrenamiento, las métricas y el informe final **no** se consideran terminados hasta ejecutar el notebook con GPU y datos reales. No se inventan resultados.
+**Universidad Bernardo O'Higgins · Machine Learning · Evaluación 03 · 2026**
 
-## Objetivo
+**Mathis Marsault · Julien Martinat · Louis Maillet**
 
-Entrenar **nuestro propio detector YOLO** para tres tipos de maquinaria de construcción: `EXCAVATORS`, `dump truck` y `wheel loader`. Comparar transfer learning y fine tuning, seleccionar el modelo únicamente con **Validation**, evaluarlo **una sola vez en Test** y demostrarlo con imágenes y videos **externos al dataset**.
+[![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![YOLO26n](https://img.shields.io/badge/Ultralytics-YOLO26n-1D3B59)](https://docs.ultralytics.com/models/yolo26/)
+[![GPU](https://img.shields.io/badge/Colab-Tesla%20T4-F9AB00?logo=googlecolab&logoColor=white)](https://colab.research.google.com/)
+[![License](https://img.shields.io/badge/Dataset-CC%20BY%204.0-219E83)](https://creativecommons.org/licenses/by/4.0/)
+[![Tests](https://github.com/MamatorHack/YOLO-Maquinaria-UBO/actions/workflows/validate.yml/badge.svg)](https://github.com/MamatorHack/YOLO-Maquinaria-UBO/actions/workflows/validate.yml)
 
-- **Fuente propuesta:** Mohamed Sabek, *Excavators*, **versión 2**: https://universe.roboflow.com/mohamed-sabek-6zmr6/excavators-cwlh0/dataset/2
-- **Licencia declarada por el autor:** CC BY 4.0 (confirmar la versión al descargar).
-- La fuente indica que v2 contiene imágenes redimensionadas a 416×416 **sin aumentos**. De todos modos, **conservamos los splits originales** y auditamos duplicados entre ellos.
-- **Inscripción obligatoria:** comprobar disponibilidad del tema en el foro de su módulo; máximo tres grupos por tema.
+**Detector entrenado por el equipo y evaluado mediante un protocolo reproducible, sin utilizar Test para seleccionar el modelo.**
 
-## Correspondencia con la plantilla oficial del docente
+[📓 Notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) · [📑 Informe PDF](report/Informe_Tecnico_E03_YOLO.pdf) · [📊 Métricas completas](docs/RESULTADOS_REALES_E03.md) · [🔍 Auditoría de datos](docs/AUDITORIA_DATASET.md)
 
-Se ha revisado el notebook original **`ML Clase10 Caras YOLO.ipynb`** (44 celdas) y los archivos de muestra entregados. La plantilla oficial incluye las funciones y gráficos requeridos por la rúbrica; sus **Partes 3–10** son la referencia para esta evaluación. Véase [revisión detallada](docs/REVISION_MATERIALES_PROFESOR.md).
+</div>
 
-El notebook en este repositorio es una implementación propia del flujo equivalente, con validaciones adicionales y bloqueo de Test. Además, se preparó en la conversación una **versión adaptada directamente del notebook docente**, sin salidas ni métricas inventadas; para incorporarla a GitHub es necesario subir el archivo `.ipynb` generado. **Usar solo uno de los notebooks para la entrega final**, ejecutado con salidas y consistente con el informe y los pesos.
+---
 
-Los ZIP de ejemplos del laboratorio (imágenes de películas y video `video_prueba.mp4`) **no son el dataset de maquinaria**. Falta descargar el ZIP de Roboflow v2 y disponer de fotos/video externos pertinentes.
+## 01 / Objetivo
 
-## Comprobaciones automáticas
+Detectar y localizar tres categorías en **fotografías reales de obras** mediante cajas delimitadoras:
 
-GitHub Actions ejecuta las pruebas Python sin GPU y valida la estructura del notebook en `[.github/workflows/validate.yml](.github/workflows/validate.yml)`. Estas pruebas **no sustituyen** la ejecución real del entrenamiento en Colab ni la inspección manual de fugas de datos.
+| ID | Clase del dataset | Interpretación |
+|:--:|---|---|
+| `0` | **EXCAVATORS** | Excavadoras |
+| `1` | **dump truck** | Camiones de volteo / camiones-benne |
+| `2` | **wheel loader** | Cargadoras frontales |
 
-## Dataset verificado y corregido — importante
+**Caso de uso exploratorio:** clasificación de material audiovisual de obras, documentación de maquinaria y apoyo a inventarios visuales. No es un detector de seguridad industrial ni un sistema certificado para aplicaciones críticas.
 
-La versión 2 de Excavators contiene **2 656 imágenes / 3 881 cajas** con tres clases correctas, pero **la partición original tiene fugas visuales** (fotogramas de un mismo video en distintos splits y fotos casi idénticas con otros nombres). Se generó una versión controlada **antes de cualquier entrenamiento**: **Train 2 406 / Validation 144 / Test 82**, documentada en [Auditoría del dataset](docs/AUDITORIA_DATASET.md).
+## 02 / Resultados reales
 
-**Usar para Colab:** se puede subir **el ZIP original de Roboflow v2**, porque el notebook aplica automáticamente la limpieza reproducible **antes del entrenamiento** y guarda el registro `LIMPIEZA_DATOS.json`. También acepta el ZIP corregido previamente. No hace falta descargar archivos grandes desde ChatGPT. Para reproducir la limpieza manualmente:
+La comparación se realizó en Validation utilizando la misma resolución **416 × 416**. La regla declarada de selección fue **máximo mAP50-95**, con desempate por mAP50; Test se usó solamente una vez, después de elegir.
 
-```bash
-pip install numpy Pillow
-python scripts/preparar_dataset_sin_fugas.py Excavators.v2-raw-images_416by416.yolov8.zip Excavators.v2-UBO-sin-fugas-evidentes.yolov8.zip
+<div align="center">
+
+| Métrica del modelo elegido | Validation | Test |
+|:---|---:|---:|
+| **Precision** | **88,63 %** | **90,13 %** |
+| **Recall** | 80,06 % | 77,05 % |
+| **mAP50** | 87,08 % | 86,59 % |
+| **mAP50-95** | **71,29 %** | **71,66 %** |
+
+</div>
+
+**Modelo elegido:** `transfer_learning.pt` → `modelo_elegido.pt`. Su mAP50-95 en Validation fue **0,712923**, frente a **0,707573** del fine tuning. El fine tuning tuvo mayor recall (**0,834979** vs **0,800567**), pero no mejoró la métrica principal de selección.
+
+**Test final:** 82 fotografías / 127 cajas; resultados obtenidos el **29 de octubre de 2026** en Google Colab con una NVIDIA Tesla T4.
+
+### Curvas de aprendizaje — entrenamiento ejecutado
+
+<table>
+<tr><th>Transfer learning · 8 épocas</th><th>Fine tuning · 5 épocas</th></tr>
+<tr>
+<td><img src="assets/figures/transfer_curves.png" width="460" alt="Curvas reales del transfer learning"></td>
+<td><img src="assets/figures/fine_curves.png" width="460" alt="Curvas reales del fine tuning"></td>
+</tr>
+</table>
+
+**Observación:** el transfer learning mejora de forma progresiva hasta la época 8; en fine tuning, el mejor mAP50-95 apareció en la época 3. El learning rate real de transfer learning fue **0,001429**: Ultralytics lo eligió mediante `optimizer=auto`, ignorando el `lr0=0.01` propuesto.
+
+### Ejemplos reales: Ground Truth vs predicción
+
+![Ejemplos con cajas reales y detecciones del modelo sobre Test](assets/figures/test_gallery.png)
+
+*Galería de seis imágenes de Test: izquierda, etiquetas reales; derecha, predicciones de `modelo_elegido.pt`. Incluye aciertos y falsas detecciones; los errores se interpretan en el informe.*
+
+### Recuento TP / FP / FN (Validation)
+
+| Umbral de confianza | IoU | TP | FP | FN |
+|---:|---:|---:|---:|---:|
+| 0,25 | 0,50 | **165** | 35 | 45 |
+
+Este recuento se basa en emparejamiento educativo de clases y cajas; no sustituye las métricas Ultralytics mAP/Precision/Recall.
+
+## 03 / Dataset y auditoría anti-fuga
+
+**Fuente:** [Excavators, Mohamed Sabek, Roboflow Universe v2](https://universe.roboflow.com/mohamed-sabek-6zmr6/excavators-cwlh0/dataset/2) · **Formato:** YOLOv8 · **Licencia de los datos:** CC BY 4.0.
+
+El ZIP inicial contenía **2 656 imágenes y 3 881 cajas**. Identificamos escenas de los mismos vídeos repartidas entre Train, Validation y Test y 24 imágenes casi idénticas entre particiones. Antes de entrenar se agruparon **161 fotogramas** de origen común en Train y se excluyeron las **24 imágenes** cercanas detectadas mediante dHash y correlación. La corrección no equivale a una garantía absoluta de independencia visual.
+
+| Split corregido | Imágenes | Cajas |
+|---|---:|---:|
+| Train | 2 406 | 3 517 |
+| Validation | 144 | 210 |
+| Test | 82 | 127 |
+| **Total** | **2 632** | **3 854** |
+
+**Transparencia y trazabilidad:** [metodología, límites y tablas por clase](docs/AUDITORIA_DATASET.md) · [script de limpieza](scripts/preparar_dataset_sin_fugas.py). El dataset completo **no se entrega** en GitHub, conforme a la consigna.
+
+## 04 / Arquitectura y entrenamiento
+
+```mermaid
+flowchart LR
+    A["Roboflow v2<br/>imágenes + YOLO labels"] --> B["Auditoría y limpieza<br/>sin fugas evidentes"]
+    B --> C["Train / Validation / Test"]
+    C --> D["Transfer learning<br/>YOLO26n, freeze=10"]
+    D --> E["Fine tuning<br/>desde best.pt, AdamW"]
+    D --> F["Comparación<br/>en Validation"]
+    E --> F
+    F --> G["Elegir mayor mAP50-95"]
+    G --> H["Test UNA sola vez"]
+    H --> I["Imágenes / Videos externos"]
+    I --> J["PDF + Notebook + pesos"]
 ```
 
-El dataset no se sube a GitHub ni se entrega al profesor, que pide solo la fuente, versión y clases. Una auditoría automática reduce riesgos de fuga pero no reemplaza la inspección visual manual ni demuestra independencia absoluta.
+| Configuración | Transfer learning | Fine tuning |
+|---|---|---|
+| Pesos de inicio | `yolo26n.pt` | `best.pt` propio |
+| Épocas | 8 | 5 |
+| `imgsz` / `batch` | 416 / 16 | 416 / 16 |
+| Capas congeladas | 10 | 0 |
+| Optimizador | AdamW seleccionado por `auto` | AdamW |
+| LR inicial real | 0,001429 | 0,0001 |
+| Train fraction | 1,0 | 1,0 |
+| Semilla | 42 | 42 |
+| GPU | Tesla T4 | Tesla T4 |
+| Tiempo registrado | 213,76 s | 135,60 s |
 
-## Inicio rápido en Google Colab (GPU T4)
+## 05 / Demostraciones externas (Eval. 03 / 04)
 
-1. Descargar la exportación original **YOLOv8** desde Roboflow Universe (versión 2) y conservarla; el notebook la limpia automáticamente en Colab. No subir el dataset a GitHub.
-2. Abrir `notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb` en Google Colab.
-3. Elegir **Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU**.
-4. Ejecutar las celdas en orden. Cuando se solicite, subir el **ZIP Roboflow v2 original** o el ZIP corregido; si el original ya está en `/content`, Colab lo reutiliza sin volver a subirlo.
-5. Al terminar, descargar inmediatamente el ZIP de resultados generado y respaldarlo en Google Drive: **/content se pierde al terminar la sesión**.
-6. Subir fotografías externas a `external/images/` y al menos un video externo a `external/videos/` para probar el detector. Para Evaluación 04 se necesitarán **dos videos de ≥10 segundos** y fuera del dataset.
+**Dos fotografías externas a los datos de entrenamiento:**
 
-**No se usa el modelo preentrenado como entrega**: las tres copias finales de pesos derivan de entrenamiento propio. Si el profesor proporciona `ML Clase10 Caras YOLO.ipynb`, contrastar nuestro notebook con su plantilla antes de entregar.
+| Recurso | Referencia | Salida observada |
+|---|---|---|
+| Foto 1 | [Pexels · Rohan Batra · 40537857](https://www.pexels.com/photo/heavy-machinery-at-indian-construction-site-40537857/) | 1 `wheel loader` (conf. aprox. 0,42) |
+| Foto 2 | [Pexels · celal keser · 36506004](https://www.pexels.com/photo/dump-truck-and-excavator-at-construction-site-36506004/) | 1 `EXCAVATORS` y 1 `dump truck`; la segunda predicción tiene confianza baja, ≈0,28 |
 
-## Estructura
+**Dos vídeos externos procesados por nuestro propio modelo:**
 
-```text
-notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb  # Flujo completo Colab
-src/yolo_ubo.py                                     # Preparación, auditoría, entrenamiento, evaluación, exportación
-tests/test_yolo_ubo.py                              # Pruebas con datos sintéticos
-docs/INFORME_BORRADOR.md                            # Secciones del informe, sin métricas inventadas
-docs/FORO_INSCRIPCION.md                            # Mensaje listo para adaptar al foro
-requirements.txt                                     # Dependencias
-models/                                             # .pt generados (no incluidos)
-results/                                            # Evidencia generada (no incluida)
-external/                                           # Imágenes/videos de demostración (no incluidos)
-```
+| Demostración | Archivo fuente | Salida anotada | Fotogramas |
+|---|---|---|---:|
+| **Vídeo 01** · maquinaria en obra | `16517436_3840_2160_30fps.mp4` | `results/video_1_streaming/` | **245** |
+| **Vídeo 02** · excavadora en operación | `16499298_3840_2160_30fps.mp4` | `results/video_2_streaming/` | **199** |
 
-## Protocolo (evitar errores que invalidan puntos)
+Los dos clips se convirtieron de 4K a **720p, 10 fps** y se analizaron con `stream=True` para evitar saturar la RAM de Google Colab. Duración estimada: **24,5 s** y **19,9 s**. Ambos superan la exigencia de 10 s para la demostración posterior.
 
-1. Mantener **Train / Validation / Test** separados; no volver a mezclar imágenes aumentadas ni fotogramas de una misma escena. Revisar alertas de duplicados.
-2. Contar imágenes y **cajas** por split/clase, visualizar anotaciones reales y explicar una etiqueta normalizada.
-3. **Transfer learning:** `yolo26n.pt`, `freeze=10`, configuración registrada.
-4. **Fine tuning:** iniciar desde `best.pt` del transfer learning, `freeze=0`, optimizador `AdamW`, learning rate bajo; registrar GPU, tiempo, épocas y curvas.
-5. Evaluar **ambos modelos en Validation**: precision, recall, mAP50, mAP50-95. Contabilizar TP/FP/FN del elegido a umbral de confianza explícito.
-6. **Fijar la selección antes de Test** (máximo mAP50-95 en Validation; desempate por mAP50). El código registra una elección inmutable y bloquea repeticiones de Test.
-7. Medir **Test una vez** con el mismo `imgsz` y hacer galería de detecciones/etiquetas. Comentar objeto perdido, falsa detección y caja mal colocada o confusión.
-8. Probar imágenes y video externos. Documentar qué funciona, qué falla y limitaciones; no afirmar niveles de precisión no medidos.
-9. Guardar `transfer_learning.pt`, `fine_tuning.pt`, `modelo_elegido.pt`; comprobar que cargan, y entregar notebook **ejecutado** y PDF **≤10 páginas**, sin portada/anexos (las referencias cuentan).
+> **Renders de vídeo:** los archivos MP4 **anotados** forman parte del ZIP `YOLO_E03_resultados.zip` del equipo. **No están alojados públicamente en este repositorio**: el ZIP de aproximadamente 509 MiB supera las limitaciones prácticas de GitHub. La tabla documenta resultados efectivamente observados en el notebook; no se presentan los MP4 de entrada como si fueran videos anotados. Para compartir las reproducciones mediante GitHub se pueden adjuntar a una Release o enlazar desde Google Drive con permiso de lectura.
 
-## Desarrollo local opcional (VS Code)
+## 06 / Cómo ejecutar (Google Colab T4)
+
+1. Abrir [notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) en [Google Colab](https://colab.research.google.com/).
+2. Ir a **Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU**.
+3. Ejecutar desde la primera celda, **en orden**, sin omitir la configuración. La primera celda clona el repositorio y carga `src/yolo_ubo.py`.
+4. Cuando se solicite el dataset, **subir el ZIP original v2 de Roboflow en formato YOLOv8**. Se aplicará automáticamente la limpieza reproducible antes del entrenamiento; no se solicita el dataset por separado en la entrega final.
+5. Ejecutar transfer learning (**8 épocas**) y luego fine tuning (**5 épocas**), comparar **ambos pesos en Validation** y registrar la selección *antes* de ejecutar Test.
+6. **Ejecutar Test una única vez.** A continuación, subir dos fotografías y dos videos externos, con procedencia documentada.
+7. Ejecutar la celda de exportación para descargar el ZIP de evidencias y tres pesos, y en Colab **Archivo → Descargar → .ipynb** para conservar todas las salidas.
+
+**Aviso:** el notebook publicado se basa en la ejecución real y conserva sus métricas y gráficos principales. Para reducir su tamaño en GitHub, se omitieron grandes imágenes embebidas redundantes, que siguen disponibles en `assets/figures/` o se regeneran al ejecutarlo. **Volver a ejecutar desde cero genera nuevos resultados**; no reemplazar las cifras de este informe por otras sin documentar la nueva ejecución.
+
+### VS Code: instalar y probar sin GPU
 
 ```bash
 git clone https://github.com/MamatorHack/YOLO-Maquinaria-UBO.git
 cd YOLO-Maquinaria-UBO
 python -m venv .venv
-# Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-python -m pytest -q
+# Windows: .venv\\Scripts\\activate
+python -m pip install -r requirements.txt
+python -m pytest -q tests
 ```
 
-El entrenamiento se realiza en **Colab gratuito con GPU**, tal como exige la consigna; VS Code facilita edición, pruebas y colaboración.
+Para reproducir solo el proceso de limpieza local:
 
-## Entregables pendientes de producir con la GPU y las evidencias reales
+```bash
+python scripts/preparar_dataset_sin_fugas.py \
+  Excavators.v2-raw-images_416by416.yolov8.zip \
+  Excavators.v2-UBO-sin-fugas-evidentes.yolov8.zip
+```
 
-- Notebook `.ipynb` **con todas sus salidas**.
-- `models/transfer_learning.pt`, `models/fine_tuning.pt`, `models/modelo_elegido.pt`.
-- PDF final en español siguiendo `FormatoEntregable.docx`, con cifras verificadas y ejemplos de errores.
-- Fotos y video externos de procedencia documentada; dos videos ≥10s para Evaluación 04.
+## 07 / Estructura del repositorio
 
-## Fuentes
+```text
+.
+├── README.md
+├── notebooks/
+│   └── E03_YOLO_Marsault_Martinat_Maillet.ipynb  # notebook con resultados reales
+├── src/
+│   └── yolo_ubo.py                              # preparación, entrenamiento y evaluación
+├── scripts/
+│   ├── preparar_dataset_sin_fugas.py             # auditoría reproducible
+│   └── build_report.py                          # compilación de PDF desde Markdown
+├── assets/figures/
+│   ├── transfer_curves.png                       # training real, 8 épocas
+│   ├── fine_curves.png                           # fine tuning real, 5 épocas
+│   └── test_gallery.png                          # real vs predicted, Test
+├── docs/
+│   ├── AUDITORIA_DATASET.md
+│   ├── RESULTADOS_REALES_E03.md
+│   ├── FORO_INSCRIPCION.md
+│   └── ENTREGA.md
+├── report/
+│   ├── INFORME_FINAL_E03.md                      # informe editable
+│   └── Informe_Tecnico_E03_YOLO.pdf              # informe A4 paginado
+├── tests/
+│   ├── test_yolo_ubo.py
+│   └── test_dataset_cleaning.py
+├── requirements.txt
+└── .github/workflows/
+    ├── validate.yml
+    └── build-report.yml
+```
 
-- Consigna UBO: *Instrucciones Evaluacion 03.pdf* y *FormatoEntregable.docx* entregados en la asignatura.
-- Dataset: https://universe.roboflow.com/mohamed-sabek-6zmr6/excavators-cwlh0/dataset/2
-- Documentación Ultralytics: https://docs.ultralytics.com/guides/finetuning-guide/
+## 08 / Entrega, reproducibilidad y límites
+
+**Se entrega un único trabajo por equipo:**
+- Notebook `.ipynb` **ejecutado**, con sus salidas, participantes y ejecución ordenada.
+- **Informe PDF máximo 10 páginas** (no cuentan portada y anexos; las referencias sí cuentan).
+- Pesos entrenados por el equipo: `transfer_learning.pt`, `fine_tuning.pt`, `modelo_elegido.pt`. Si la plataforma no los admite, compartirlos mediante Google Drive con acceso al docente.
+- Enlace, versión, licencia y clases del dataset (no se entrega el ZIP de imágenes).
+
+**Límites reconocidos:** Test relativamente pequeño, solo 17 cajas de excavadoras, detecciones espurias entre clases visualmente similares y filtrado automático de casi duplicados imperfecto. En la galería hay confusiones y falsas detecciones; los FN se registran cuantitativamente en Validation, pero hace falta señalar un FN visual de Test específico para completar la evidencia cualitativa con máximo rigor. No se inventan métricas ni resultados.
+
+**Pendiente administrativo:** completar número de grupo/módulo y enlaces exactos de autoría de los dos vídeos externos antes de entregar. [Ver checklist](docs/ENTREGA.md).
+
+---
+
+<div align="center">
+
+**Equipo Machine Learning UBO · 2026**  
+*Resultados de un experimento académico real, no evaluación de un producto industrial.*
+
+</div>
