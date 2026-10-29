@@ -1,0 +1,35 @@
+name: Validación del proyecto (sin GPU)
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Obtener código
+        uses: actions/checkout@v4
+      - name: Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar dependencias de pruebas
+        run: python -m pip install --upgrade pip pytest numpy PyYAML Pillow nbformat
+      - name: Verificar el notebook
+        run: |
+          python - <<'PY'
+          import nbformat
+          n = nbformat.read("notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb", as_version=4)
+          nbformat.validate(n)
+          code = "\n".join(c.source for c in n.cells if c.cell_type == "code")
+          for item in ("freeze=10", "freeze=0", "select_model(", "test_once("):
+              assert item in code, f"Falta {item}"
+          print(f"Notebook válido: {len(n.cells)} celdas")
+          PY
+      - name: Ejecutar tests
+        run: python -m pytest -q tests
