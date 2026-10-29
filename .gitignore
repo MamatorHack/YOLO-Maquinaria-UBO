@@ -1,0 +1,28 @@
+# Credenciales y entornos
+.env
+.env.*
+!.env.example
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.ipynb_checkpoints/
+# Grandes archivos de entrada y modelos
+*.pt
+*.pth
+*.zip
+*.mp4
+*.mov
+*.avi
+datasets/
+data/
+external/images/*
+external/videos/*
+!external/images/.gitkeep
+!external/videos/.gitkeep
+# Entrenamientos y evidencia reproducible
+runs*/
+yolo_runs/
+results/*
+!results/.gitkeep
+.DS_Store
