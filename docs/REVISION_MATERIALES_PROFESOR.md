@@ -3,7 +3,7 @@
 ## Archivos aportados
 
 - **`ML Clase10 Caras YOLO.ipynb`**: plantilla oficial de Clase 10 del Dr. Eliecer Peña Ancavil, **44 celdas**. Tiene funciones reutilizables: `crear_dataset_de_trabajo`, `contar_dataset`, `mostrar_muestras`, `explicar_etiqueta`, `filtrar_clases`, `entrenar`, `graficar_curvas`, `evaluar`, `contar_aciertos`, `galeria_real_vs_predicho`, `predecir_imagenes`, `predecir_video`. La evaluación 03 explícitamente permite basarse en esta plantilla.
-- **`ejemplos.zip`** y **`ejemplos(1).zip`**: mismo contenido, nueve imágenes de ejemplo `Imagen01..09`, seis imágenes de ejemplo (incluidos afiches de películas) y `video_prueba.mp4`. **No son un dataset YOLO de maquinaria**: no contienen `data.yaml` ni etiquetas de bounding boxes.
+- **`ejemplos.zip`** y **`ejemplos(1).zip`**: mismo contenido, nueve imágenes `Imagen01..09`, cinco afiches de películas y `video_prueba.mp4`. **No son un dataset YOLO de maquinaria**: no contienen `data.yaml` ni etiquetas de bounding boxes.
 - **`Monitos_evolutivos_estudiantes (1).zip`**: contiene un archivo `.html`, no un dataset YOLO.
 
 ## Cómo adaptar la plantilla de Clase 10 (ruta recomendada)
