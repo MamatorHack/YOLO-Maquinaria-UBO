@@ -16,6 +16,18 @@ Entrenar **nuestro propio detector YOLO** para tres tipos de maquinaria de const
 - La fuente indica que v2 contiene imágenes redimensionadas a 416×416 **sin aumentos**. De todos modos, **conservamos los splits originales** y auditamos duplicados entre ellos.
 - **Inscripción obligatoria:** comprobar disponibilidad del tema en el foro de su módulo; máximo tres grupos por tema.
 
+## Correspondencia con la plantilla oficial del docente
+
+Se ha revisado el notebook original **`ML Clase10 Caras YOLO.ipynb`** (44 celdas) y los archivos de muestra entregados. La plantilla oficial incluye las funciones y gráficos requeridos por la rúbrica; sus **Partes 3–10** son la referencia para esta evaluación. Véase [revisión detallada](docs/REVISION_MATERIALES_PROFESOR.md).
+
+El notebook en este repositorio es una implementación propia del flujo equivalente, con validaciones adicionales y bloqueo de Test. Además, se preparó en la conversación una **versión adaptada directamente del notebook docente**, sin salidas ni métricas inventadas; para incorporarla a GitHub es necesario subir el archivo `.ipynb` generado. **Usar solo uno de los notebooks para la entrega final**, ejecutado con salidas y consistente con el informe y los pesos.
+
+Los ZIP de ejemplos del laboratorio (imágenes de películas y video `video_prueba.mp4`) **no son el dataset de maquinaria**. Falta descargar el ZIP de Roboflow v2 y disponer de fotos/video externos pertinentes.
+
+## Comprobaciones automáticas
+
+GitHub Actions ejecuta las pruebas Python sin GPU y valida la estructura del notebook en `[.github/workflows/validate.yml](.github/workflows/validate.yml)`. Estas pruebas **no sustituyen** la ejecución real del entrenamiento en Colab ni la inspección manual de fugas de datos.
+
 ## Inicio rápido en Google Colab (GPU T4)
 
 1. Descargar el ZIP en formato **YOLO** desde Roboflow Universe (versión 2). No subirlo al repositorio.
