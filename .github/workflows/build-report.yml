@@ -1,0 +1,49 @@
+name: Generar informe PDF de Evaluación 03
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'report/INFORME_FINAL_E03.md'
+      - 'scripts/build_report.py'
+      - 'assets/figures/transfer_curves.png'
+      - 'assets/figures/fine_curves.png'
+      - 'assets/figures/test_gallery.png'
+      - '.github/workflows/build-report.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  pdf-report:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar repositorio
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Preparar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Instalar generador de PDF
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install "WeasyPrint>=66,<69" "Markdown>=3.7" "Pillow>=10" "pypdf>=5"
+      - name: Generar informe y validar límite de páginas
+        run: python scripts/build_report.py
+      - name: Publicar artefacto PDF
+        uses: actions/upload-artifact@v4
+        with:
+          name: Informe_Tecnico_E03_YOLO
+          path: report/Informe_Tecnico_E03_YOLO.pdf
+      - name: Guardar PDF y paneles en main
+        if: github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add report/Informe_Tecnico_E03_YOLO.pdf assets/figures/test_*.jpg
+          if ! git diff --cached --quiet; then
+            git commit -m "report: publish validated PDF and visual evidence [skip ci]"
+            git push
+          fi
