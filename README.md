@@ -146,10 +146,14 @@ Se utilizaron dos fotografías de Pexels y dos vídeos externos al conjunto de e
 | [celal keser, Pexels 36506004](https://www.pexels.com/photo/dump-truck-and-excavator-at-construction-site-36506004/) | `EXCAVATORS` (≈ 0,68) y `dump truck` (≈ 0,28) | Posible confusión; la segunda predicción es débil |
 
 ### Vídeo 1 · Maquinaria de construcción (24,5 s)
-* [▶ Reproducir / Descargar Vídeo 1 (MP4)](assets/video_1_720p.mp4)
+
+[![▶ Visualizar Vídeo 1](https://user-images.githubusercontent.com/williams/play-button-placeholder.png)](assets/video_1_720p.mp4)  
+👉 *Si el vídeo no se reproduce directamente, haz clic en la imagen o [descárgalo aquí](assets/video_1_720p.mp4).*
 
 ### Vídeo 2 · Excavadora en obra (19,9 s)
-* [▶ Reproducir / Descargar Vídeo 2 (MP4)](assets/video_2_720p.mp4)
+
+[![▶ Visualizar Vídeo 2](https://user-images.githubusercontent.com/williams/play-button-placeholder.png)](assets/video_2_720p.mp4)  
+👉 *Si el vídeo no se reproduce directamente, haz clic en la imagen o [descárgalo aquí](assets/video_2_720p.mp4).*
 
 > **Distinción esencial:** los dos MP4 publicados en `assets/` son los **vídeos de entrada, redimensionados a 720p y 10 fps, SIN cajas YOLO**. El notebook ejecutado documenta la inferencia de 245 y 199 fotogramas; las **salidas con detecciones** se generaron en `results/video_1_streaming/` y `results/video_2_streaming/`, guardadas en el ZIP de resultados del equipo, pero no están publicadas en este repositorio. No se deben confundir originales y predicciones.
 
