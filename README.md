@@ -2,19 +2,25 @@
 
 # 🏗️ YOLO Maquinaria UBO
 
-### Detección automática de maquinaria de construcción con YOLO26n
+### Detección y localización de maquinaria de construcción · YOLO26n
+
+**Auditoría de datos → transfer learning → fine tuning → Validation → Test → demostraciones externas.**
 
 **Universidad Bernardo O'Higgins · Machine Learning · Evaluación 03 · 2026**
 
 **Mathis Marsault · Julien Martinat · Louis Maillet**
 
-[![Python](https://img.shields.io/badge/Python-3.13-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Python](https://img.shields.io/badge/Python-3.11%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
 [![YOLO26n](https://img.shields.io/badge/Ultralytics-YOLO26n-1D3B59)](https://docs.ultralytics.com/models/yolo26/)
 [![GPU](https://img.shields.io/badge/Colab-Tesla%20T4-F9AB00?logo=googlecolab&logoColor=white)](https://colab.research.google.com/)
 [![License](https://img.shields.io/badge/Dataset-CC%20BY%204.0-219E83)](https://creativecommons.org/licenses/by/4.0/)
 [![Tests](https://github.com/MamatorHack/YOLO-Maquinaria-UBO/actions/workflows/validate.yml/badge.svg)](https://github.com/MamatorHack/YOLO-Maquinaria-UBO/actions/workflows/validate.yml)
 
 **Detector entrenado por el equipo y evaluado mediante un protocolo reproducible, sin utilizar Test para seleccionar el modelo.**
+
+![mAP50-95 Test](https://img.shields.io/badge/mAP50--95%20Test-71.66%25-087F8C?style=for-the-badge) ![Precision Test](https://img.shields.io/badge/Precision%20Test-90.13%25-294C60?style=for-the-badge) ![Clases](https://img.shields.io/badge/Clases-3-3B8F6C?style=for-the-badge)
+
+**Ir a:** [Resultados](#resultados) · [Dataset](#dataset) · [Entrenamiento](#entrenamiento) · [Vídeos](#videos) · [Reproducción](#reproduccion) · [Checklist](#checklist)
 
 [📓 Notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) · [📑 Informe PDF](report/Informe_Tecnico_E03_YOLO.pdf) · [📊 Métricas completas](docs/RESULTADOS_REALES_E03.md) · [🔍 Auditoría de datos](docs/AUDITORIA_DATASET.md)
 
@@ -34,6 +40,7 @@ Detectar y localizar tres categorías en **fotografías reales de obras** median
 
 **Caso de uso exploratorio:** clasificación de material audiovisual de obras, documentación de maquinaria y apoyo a inventarios visuales. No es un detector de seguridad industrial ni un sistema certificado para aplicaciones críticas.
 
+<a id="resultados"></a>
 ## 02 / Resultados reales
 
 La comparación se realizó en Validation utilizando la misma resolución **416 × 416**. La regla declarada de selección fue **máximo mAP50-95**, con desempate por mAP50; Test se usó solamente una vez, después de elegir.
@@ -79,6 +86,7 @@ La comparación se realizó en Validation utilizando la misma resolución **416 
 
 Este recuento se basa en emparejamiento educativo de clases y cajas; no sustituye las métricas Ultralytics mAP/Precision/Recall.
 
+<a id="dataset"></a>
 ## 03 / Dataset y auditoría anti-fuga
 
 **Fuente:** [Excavators, Mohamed Sabek, Roboflow Universe v2](https://universe.roboflow.com/mohamed-sabek-6zmr6/excavators-cwlh0/dataset/2) · **Formato:** YOLOv8 · **Licencia de los datos:** CC BY 4.0.
@@ -94,6 +102,7 @@ El ZIP inicial contenía **2 656 imágenes y 3 881 cajas**. Identificamos escena
 
 **Transparencia y trazabilidad:** [metodología, límites y tablas por clase](docs/AUDITORIA_DATASET.md) · [script de limpieza](scripts/preparar_dataset_sin_fugas.py). El dataset completo **no se entrega** en GitHub, conforme a la consigna.
 
+<a id="entrenamiento"></a>
 ## 04 / Arquitectura y entrenamiento
 
 ```mermaid
@@ -123,26 +132,55 @@ flowchart LR
 | GPU | Tesla T4 | Tesla T4 |
 | Tiempo registrado | 213,76 s | 135,60 s |
 
-## 05 / Demostraciones externas (Eval. 03 / 04)
+<a id="videos"></a>
+## 05 / Demostraciones externas · imágenes y vídeos
 
-**Dos fotografías externas a los datos de entrenamiento:**
+El detector elegido en Validation se aplicó a material **ajeno al dataset**, sin modificar los pesos. Estas demostraciones ilustran el uso del modelo, pero no son una evaluación estadística adicional: los vídeos no tienen anotaciones de referencia.
 
-| Recurso | Referencia | Salida observada |
+### 📸 Fotografías externas
+
+| Fuente | Detección documentada | Observación |
 |---|---|---|
-| Foto 1 | [Pexels · Rohan Batra · 40537857](https://www.pexels.com/photo/heavy-machinery-at-indian-construction-site-40537857/) | 1 `wheel loader` (conf. aprox. 0,42) |
-| Foto 2 | [Pexels · celal keser · 36506004](https://www.pexels.com/photo/dump-truck-and-excavator-at-construction-site-36506004/) | 1 `EXCAVATORS` y 1 `dump truck`; la segunda predicción tiene confianza baja, ≈0,28 |
+| [Pexels · Rohan Batra · 40537857](https://www.pexels.com/photo/heavy-machinery-at-indian-construction-site-40537857/) | `wheel loader` · confianza ≈ 0,42 | Localización posible con confianza moderada-baja |
+| [Pexels · celal keser · 36506004](https://www.pexels.com/photo/dump-truck-and-excavator-at-construction-site-36506004/) | `EXCAVATORS` ≈ 0,68 y `dump truck` ≈ 0,28 | Posible confusión de objetos; la segunda predicción es débil |
 
-**Dos vídeos externos procesados por nuestro propio modelo:**
+### 🎬 Vídeos procesados por nuestro YOLO
 
-| Demostración | Archivo fuente | Salida anotada | Fotogramas |
-|---|---|---|---:|
-| **Vídeo 01** · maquinaria en obra | `16517436_3840_2160_30fps.mp4` | `results/video_1_streaming/` | **245** |
-| **Vídeo 02** · excavadora en operación | `16499298_3840_2160_30fps.mp4` | `results/video_2_streaming/` | **199** |
+En Colab, cada clip original 4K/30 fps se convirtió a **720p/10 fps** y se procesó con el modelo `modelo_elegido.pt`, `imgsz=416`, `conf=0.25`, `stream=True` y `save=True`. Las dos salidas anotadas se incluyeron en el ZIP de resultados del equipo.
 
-Los dos clips se convirtieron de 4K a **720p, 10 fps** y se analizaron con `stream=True` para evitar saturar la RAM de Google Colab. Duración estimada: **24,5 s** y **19,9 s**. Ambos superan la exigencia de 10 s para la demostración posterior.
+| Demostración | Archivo original | Duración | Fotogramas procesados | Carpeta del vídeo anotado |
+|---|---|---:|---:|---|
+| **🎞️ Vídeo 01 · maquinaria en obra** | `16517436_3840_2160_30fps.mp4` | **24,5 s** | **245** | `results/video_1_streaming/` |
+| **🎞️ Vídeo 02 · excavadora en obra** | `16499298_3840_2160_30fps.mp4` | **19,9 s** | **199** | `results/video_2_streaming/` |
 
-> **Renders de vídeo:** los archivos MP4 **anotados** forman parte del ZIP `YOLO_E03_resultados.zip` del equipo. **No están alojados públicamente en este repositorio**: el ZIP de aproximadamente 509 MiB supera las limitaciones prácticas de GitHub. La tabla documenta resultados efectivamente observados en el notebook; no se presentan los MP4 de entrada como si fueran videos anotados. Para compartir las reproducciones mediante GitHub se pueden adjuntar a una Release o enlazar desde Google Drive con permiso de lectura.
+<details>
+<summary><strong>▶ Vídeo 01 · metodología y resultado</strong></summary>
 
+En la **Parte 12** del [notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) se muestra la importación, la conversión y la inferencia del primer vídeo. La salida anotada se guardó bajo `results/video_1_streaming/`.
+
+</details>
+
+<details>
+<summary><strong>▶ Vídeo 02 · metodología y resultado</strong></summary>
+
+En la **Parte 12** del [notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) se documentan también la conversión y la inferencia del segundo vídeo. La salida anotada se guardó bajo `results/video_2_streaming/`.
+
+</details>
+
+> [!IMPORTANT]
+> **Visionado de los dos vídeos:** el notebook y el ZIP `YOLO_E03_resultados.zip` del equipo registran los resultados, pero **los MP4 anotados no están alojados públicamente en este GitHub**. No se ofrece un reproductor ficticio ni un enlace roto. Para visualizarlos directamente desde el README, primero hay que publicar esos dos MP4 y añadir sus direcciones reales. El ZIP completo (≈ 508,61 MiB) tampoco está alojado en este repositorio.
+
+**Procedencia pendiente:** confirmar el enlace, la autoría y la licencia exacta de los dos MP4 realmente empleados. Sus nombres de archivo no son suficientes para acreditarlos.
+
+### 🖼️ Evidencia visual que ya puede abrirse en GitHub
+
+[Galería real vs predicción](assets/figures/test_gallery.png) · [Detección correcta](assets/figures/test_correct.jpg) · [Falsa detección](assets/figures/test_false_positive.jpg) · [Matriz de confusión](assets/figures/test_confusion.jpg)
+
+![Seis casos Test: etiquetas reales a la izquierda y predicciones a la derecha](assets/figures/test_gallery.png)
+
+*Son imágenes fijas del conjunto Test, no fotogramas de los vídeos externos.*
+
+<a id="reproduccion"></a>
 ## 06 / Cómo ejecutar (Google Colab T4)
 
 1. Abrir [notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) en [Google Colab](https://colab.research.google.com/).
@@ -161,7 +199,7 @@ Los dos clips se convirtieron de 4K a **720p, 10 fps** y se analizaron con `stre
 git clone https://github.com/MamatorHack/YOLO-Maquinaria-UBO.git
 cd YOLO-Maquinaria-UBO
 python -m venv .venv
-# Windows: .venv\\Scripts\\activate
+# Windows (PowerShell): .venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
 python -m pytest -q tests
 ```
@@ -185,16 +223,22 @@ python scripts/preparar_dataset_sin_fugas.py \
 │   └── yolo_ubo.py                              # preparación, entrenamiento y evaluación
 ├── scripts/
 │   ├── preparar_dataset_sin_fugas.py             # auditoría reproducible
-│   └── build_report.py                          # compilación de PDF desde Markdown
+│   ├── build_report.py                           # compilación de PDF desde Markdown
+│   ├── generar_evidencia_errores.py              # paneles de errores
+│   └── generar_informe_pdf.py                    # generador alternativo
 ├── assets/figures/
 │   ├── transfer_curves.png                       # training real, 8 épocas
 │   ├── fine_curves.png                           # fine tuning real, 5 épocas
-│   └── test_gallery.png                          # real vs predicted, Test
+│   ├── test_gallery.png                          # real vs predicted, Test
+│   ├── test_correct.jpg
+│   ├── test_false_positive.jpg
+│   └── test_confusion.jpg
 ├── docs/
 │   ├── AUDITORIA_DATASET.md
 │   ├── RESULTADOS_REALES_E03.md
 │   ├── FORO_INSCRIPCION.md
-│   └── ENTREGA.md
+│   ├── ENTREGA.md
+│   └── REVISION_MATERIALES_PROFESOR.md
 ├── report/
 │   ├── INFORME_FINAL_E03.md                      # informe editable
 │   └── Informe_Tecnico_E03_YOLO.pdf              # informe A4 paginado
@@ -204,9 +248,11 @@ python scripts/preparar_dataset_sin_fugas.py \
 ├── requirements.txt
 └── .github/workflows/
     ├── validate.yml
-    └── build-report.yml
+    ├── build-report.yml
+    └── report_preview.yml
 ```
 
+<a id="checklist"></a>
 ## 08 / Entrega, reproducibilidad y límites
 
 **Se entrega un único trabajo por equipo:**
@@ -217,7 +263,24 @@ python scripts/preparar_dataset_sin_fugas.py \
 
 **Límites reconocidos:** Test relativamente pequeño, solo 17 cajas de excavadoras, detecciones espurias entre clases visualmente similares y filtrado automático de casi duplicados imperfecto. En la galería hay confusiones y falsas detecciones; los FN se registran cuantitativamente en Validation, pero hace falta señalar un FN visual de Test específico para completar la evidencia cualitativa con máximo rigor. No se inventan métricas ni resultados.
 
-**Pendiente administrativo:** completar número de grupo/módulo y enlaces exactos de autoría de los dos vídeos externos antes de entregar. [Ver checklist](docs/ENTREGA.md).
+### ✅ Estado frente a la rúbrica de Evaluación 03
+
+| Requisito | Evidencia | Estado |
+|---|---|---|
+| Dataset, fuente, versión, licencia, tres clases y particiones | Secciones 01 y 03 | ✅ |
+| Corrección de fugas antes de entrenar | Auditoría y script | ✅ |
+| Transfer learning y fine tuning con GPU, tiempos y curvas | Secciones 02 y 04 | ✅ |
+| Cuatro métricas de ambos modelos en Validation | Tabla comparativa | ✅ |
+| Selección anterior a Test y Test una sola vez | Notebook y resultados | ✅ |
+| TP / FP / FN en Validation con umbrales | 165 / 35 / 45 | ✅ |
+| Dos imágenes externas y dos vídeos ≥ 10 s | Procesamientos documentados | ✅; vídeo público pendiente |
+| Tres errores cualitativos en Test | Confusión y falsa detección | ⚠️ falta un FN visual de Test |
+| Notebook, PDF y tres pesos propios | Notebook/PDF en GitHub; pesos en ZIP | ⚠️ entregar pesos al docente |
+| Grupo/módulo y procedencia exacta de los MP4 | Por confirmar | ⚠️ |
+
+**Antes de entregar:** completar grupo y módulo, acreditar las URL de origen de los MP4, identificar un FN concreto en Test sin repetir la evaluación, hacer accesibles los vídeos anotados y los tres pesos, y revisar el PDF final de forma manual.
+
+Este checklist revisa las **evidencias documentadas**; no equivale a inspeccionar físicamente los MP4 del ZIP. [Checklist detallado](docs/ENTREGA.md).
 
 ---
 
