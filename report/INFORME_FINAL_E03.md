@@ -4,7 +4,7 @@
 **Integrantes:** Mathis Marsault · Julien Martinat · Louis Maillet  
 **Docente:** Dr. Eliecer Peña Ancavil  
 **Fecha de entrega:** 7 de noviembre de 2026  
-**Grupo y módulo:** [Completar con los identificadores oficiales antes de entregar]
+**Grupo y módulo:** no comunicados en los materiales disponibles (identificadores oficiales por confirmar en el foro).
 
 ---
 
@@ -124,11 +124,11 @@ El mAP50-95 pasó de 0,7129 en Validation a **0,7166 en Test**, mientras que el 
 
 **Error 2 — Falsa detección (Test).** En otra `wheel loader`, parte de la máquina genera una caja `dump truck` con confianza **0,26**. El resultado está próximo al umbral de 0,25, por lo que evidencia sensibilidad a rasgos visuales compartidos y a la decisión de confianza.
 
-**Error 3 — Objeto perdido (Validation).** El recuento registró **45 FN** y marcó, entre otras, `construction--1022-_jpg.rf.0f8fbf1c01af59e01230fb308bf40ffa.jpg` como imagen con al menos un objeto no emparejado a IoU 0,50 y confianza 0,25. Es un **error de Validation**, no debe presentarse falsamente como observación de Test. Sin inspeccionar su caja concreta no es posible atribuir una causa visual exacta. Esto deja pendiente seleccionar visualmente un FN específico de Test para una evidencia perfecta del requisito cualitativo.
+**Error 3 — Objeto perdido (Test: evidencia cuantitativa, no visual).** El **Recall de Test = 0,7705**, inferior a 1, demuestra que el modelo no recuperó todos los objetos anotados. Estos fallos de omisión podrían afectar a un inventario visual. No se recuperó una pareja concreta de caja real y predicción de Test para ilustrar un FN individual; por rigor, **no se atribuye este fallo a una imagen específica**. Como evidencia independiente, el conteo a umbral fijo de **Validation** fue de **45 FN** (confianza 0,25; IoU 0,50), pero no se confunden ambos conjuntos. La falta de una captura inequívoca de FN en Test continúa siendo una limitación cualitativa del material disponible.
 
 ## 6. Uso con imágenes y vídeo externos
 
-Se probaron **dos fotografías externas** al dataset, obtenidas de Pexels, con el `modelo_elegido.pt` (416 px, confianza mínima 0,25). La primera produjo una detección `wheel loader`; la segunda produjo `EXCAVATORS` y `dump truck`. En las imágenes anotadas recibidas se observaron respectivamente confianzas aproximadas de **0,42** para la cargadora y de **0,68 / 0,28** para las otras dos categorías. La detección de confianza 0,28 es débil y podría ser espuria; no se presenta como un acierto seguro. Los archivos anotados están en `results/external_images` dentro del respaldo del equipo.
+Se probaron **dos fotografías externas** al dataset, obtenidas de Pexels, con el `modelo_elegido.pt` (416 px, confianza mínima 0,25). La primera produjo una detección `wheel loader`; la segunda produjo `EXCAVATORS` y `dump truck`. En las imágenes anotadas recibidas se observaron respectivamente confianzas aproximadas de **0,42** para la cargadora y de **0,68 / 0,28** para las otras dos categorías. La detección de confianza 0,28 es débil y podría ser espuria; no se presenta como un acierto seguro. Las imágenes con las cajas predichas se generaron en `results/external_images` del respaldo ZIP del equipo; **el notebook entregado solo incorpora sus registros de inferencia, no estas capturas**, por lo que no se incluyen supuestas imágenes anotadas que no se hayan recuperado. La primera fotografía presenta una detección con confianza moderada y la segunda muestra una detección de baja confianza que requiere comprobación humana.
 
 **Tabla 6. Material externo utilizado.**
 
@@ -139,13 +139,13 @@ Se probaron **dos fotografías externas** al dataset, obtenidas de Pexels, con e
 | Vídeo 1 | Archivo externo `16517436_3840_2160_30fps.mp4` | 245 fotogramas anotados |
 | Vídeo 2 | Archivo externo `16499298_3840_2160_30fps.mp4` | 199 fotogramas anotados |
 
-Ambos vídeos externos se transformaron de 4K a **720p / 10 fps** para limitar el uso de RAM de Colab, sin modificar el modelo. La inferencia se realizó con `stream=True` para no almacenar todas las predicciones en memoria. Se obtuvieron clips procesados de **24,5 y 19,9 segundos** aproximadamente. Su grabación no forma parte del dataset de entrenamiento, según las fuentes empleadas por el equipo. Los dos clips anotados se guardaron en `results/video_1_streaming` y `results/video_2_streaming` en el archivo de evidencias, fuera del repositorio por su tamaño.
+Ambos vídeos externos se transformaron de 4K a **720p / 10 fps** para limitar el uso de RAM de Colab, sin modificar el modelo. La inferencia se realizó con `stream=True` para no almacenar todas las predicciones en memoria. Se obtuvieron clips procesados de **24,5 y 19,9 segundos** aproximadamente. Los vídeos se introdujeron como material externo al entrenamiento; su independencia respecto del dataset se declara según el protocolo utilizado, sin equivaler a una comprobación exhaustiva de procedencia. Los dos clips anotados se guardaron en `results/video_1_streaming` y `results/video_2_streaming` en el archivo de evidencias, fuera del repositorio por su tamaño.
 
 Estas pruebas muestran que el detector funciona en fuentes externas al dataset, pero las dos imágenes y dos vídeos **no constituyen una nueva prueba estadística independiente**. La iluminación, la distancia, el tamaño aparente de las máquinas y el punto de vista pueden modificar tanto las confianzas como la localización de las cajas. En particular, una predicción con confianza baja exige verificación humana.
 
 ## 7. Conclusiones y límites
 
-El equipo construyó y entrenó un detector YOLO26n propio para tres tipos de maquinaria, comparó de forma controlada dos estrategias y seleccionó un modelo **sin consultar Test**. El modelo elegido alcanzó **mAP50=0,8659** y **mAP50-95=0,7166** en el conjunto Test depurado, con una **Precision=0,9013** y un **Recall=0,7705**. La demostración en fotografías y vídeos externos confirma que puede producir cajas sobre material nuevo, aunque también aparecen falsas detecciones y clasificaciones confusas.
+El equipo construyó y entrenó un detector YOLO26n propio para tres tipos de maquinaria, comparó de forma controlada dos estrategias y seleccionó un modelo **sin consultar Test**. El modelo elegido alcanzó **mAP50=0,8659** y **mAP50-95=0,7166** en el conjunto Test depurado, con una **Precision=0,9013** y un **Recall=0,7705**. Este último valor también confirma que el detector pierde algunos objetos; los ejemplos visuales publicados no identifican todavía un caso concreto de FN en Test. La demostración en fotografías y vídeos externos confirma que puede producir cajas sobre material nuevo, aunque también aparecen falsas detecciones y clasificaciones confusas.
 
 El fine tuning mejoró recall y mAP50 en Validation, pero no mejoró el mAP50-95 usado como criterio de selección. El resultado ilustra la importancia de **comparar modelos con una regla declarada**, y no elegir automáticamente la etapa más larga.
 
@@ -160,7 +160,7 @@ Con más tiempo de GPU se podría ampliar el dataset con obras, cámaras y condi
 3. Ultralytics. *YOLO26 Documentation*. https://docs.ultralytics.com/models/yolo26/
 4. Pexels. Rohan Batra. Imagen 40537857. https://www.pexels.com/photo/heavy-machinery-at-indian-construction-site-40537857/
 5. Pexels. celal keser. Imagen 36506004. https://www.pexels.com/photo/dump-truck-and-excavator-at-construction-site-36506004/
-6. Archivos externos de vídeo utilizados en el notebook (`16517436_3840_2160_30fps.mp4` y `16499298_3840_2160_30fps.mp4`). **Completar el enlace exacto y autor de cada vídeo según sus páginas de descarga antes de la entrega.**
+6. Material audiovisual externo empleado en el notebook: `16517436_3840_2160_30fps.mp4` (24,5 s) y `16499298_3840_2160_30fps.mp4` (19,9 s). Los nombres identifican los archivos efectivamente procesados, pero **no permiten verificar autoría, página de origen o licencia**; sus referencias bibliográficas completas no están acreditadas en los materiales del equipo.
 
 ---
 
