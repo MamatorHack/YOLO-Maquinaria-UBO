@@ -156,7 +156,7 @@ def make_html(font_size=10.0) -> str:
 def main():
     logging.getLogger("weasyprint").setLevel(logging.WARNING)
     crop_gallery()
-    for font in (10.0, 9.6, 9.25, 9.0, 8.75):
+    for font in (11.0, 10.8, 10.6, 10.4, 10.2, 10.0):
         document = HTML(string=make_html(font), base_url=str(ROOT / "report")).render()
         pages = len(document.pages)
         print(f"Prueba de maqueta: {pages} páginas con fuente {font} pt")
