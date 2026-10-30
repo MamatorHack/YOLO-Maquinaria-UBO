@@ -153,6 +153,11 @@ Se utilizaron dos fotografías de Pexels y dos vídeos externos al conjunto de e
 
 **[▶ Abrir / descargar vídeo 1 (MP4)](assets/video_1_720p.mp4)**
 
+<video src="assets/video_1_720p.mp4" controls width="100%"></video>
+
+### Vidéo 2 · Excavadora en obra
+<video src="assets/video_2_720p.mp4" controls width="100%"></video>
+
 ### Vídeo 2 · excavadora en obra (19,9 s)
 
 <video controls preload="metadata" width="100%" src="assets/video_2_720p.mp4">
