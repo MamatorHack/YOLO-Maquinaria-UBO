@@ -22,7 +22,7 @@
 
 **Ir a:** [Resultados](#resultados) · [Dataset](#dataset) · [Entrenamiento](#entrenamiento) · [Vídeos](#videos) · [Reproducción y entrega](#reproduccion)
 
-[📓 Notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) · [📑 Informe PDF](report/Informe_Tecnico_E03_YOLO.pdf) · [📊 Métricas completas](docs/RESULTADOS_REALES_E03.md) · [🔍 Auditoría de datos](docs/AUDITORIA_DATASET.md)
+[📓 Notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) · [📑 Informe PDF](report/Informe_Tecnico_E03_YOLO_Marsault_Martinat_Maillet.pdf) · [📊 Métricas completas](docs/RESULTADOS_REALES_E03.md) · [🔍 Auditoría de datos](docs/AUDITORIA_DATASET.md)
 
 </div>
 
