@@ -94,3 +94,15 @@ Comparado con Validation: mAP50-95 +0,003637; mAP50 −0,004890; recall −0,030
 - Incorporar gráficas legibles y tiempos/equipo a las secciones correspondientes del informe (máximo diez páginas, referencias incluidas).
 
 **Nota técnica:** `results.csv` facilitado del fine tuning refleja las **cinco épocas** y su mAP50-95 máximo en época 3. El entrenamiento y la selección ya quedaron hechos; **no repetir Test** para obtener evidencias adicionales.
+
+
+## Evidencia final de las demostraciones externas (ejecución 29/10/2026)
+
+- **Foto 1:** `pexels-rohanbatra-40537857.jpg`, predicción de `wheel loader`; el material visual proporcionado mostró confianza aproximada 0,42.
+- **Foto 2:** `pexels-celalkeser-36506004.jpg`, predicciones de `EXCAVATORS` y `dump truck`, con confianzas aproximadas 0,68 y 0,28. El segundo resultado es débil y debe evaluarse como posible falsa detección.
+- **Vídeo 1:** `16517436_3840_2160_30fps.mp4`, salida `results/video_1_streaming`, **245 fotogramas** en 720p a 10 fps.
+- **Vídeo 2:** `16499298_3840_2160_30fps.mp4`, salida `results/video_2_streaming`, **199 fotogramas** en 720p a 10 fps.
+- **Respaldo final:** `YOLO_E03_resultados.zip` creado por Colab, **508,61 MiB** según la salida del notebook; pesos `transfer_learning.pt`, `fine_tuning.pt` y `modelo_elegido.pt` confirmados presentes. Este ZIP no se publica en GitHub; debe entregarse por plataforma o Drive.
+- **CSV real del fine tuning:** [`assets/metrics/fine_tuning_results.csv`](../assets/metrics/fine_tuning_results.csv), con 5 épocas y máximo mAP50-95 en época 3.
+
+El [informe PDF final](../report/Informe_Tecnico_E03_YOLO.pdf) contiene resultados, gráficos y análisis. El PDF fue validado automáticamente en 7 páginas totales (1 portada + 6 de informe). Los enlaces exactos de origen de los dos videos deben acreditarse antes de la entrega.
