@@ -145,7 +145,8 @@ def make_html(font_size=10.0) -> str:
         <p><b>Docente</b> · Dr. Eliecer Peña Ancavil</p>
         <p><b>Universidad</b> · Universidad Bernardo O'Higgins, Santiago</p>
         <p><b>Entrega</b> · 7 de noviembre de 2026</p>
-        <p><b>Grupo y módulo</b> · Completar antes de la entrega en aula virtual</p>
+        <p><b>Grupo de trabajo</b> · Marsault · Martinat · Maillet (3 integrantes)</p>
+        <p><b>Módulo académico</b> · Machine Learning</p>
       </div>
     </section>
     """
