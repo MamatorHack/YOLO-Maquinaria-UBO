@@ -12,6 +12,9 @@ __pycache__/
 *.pth
 *.zip
 *.mp4
+# Los únicos vídeos públicos del README son renders YOLO anotados.
+!assets/videos/
+!assets/videos/*.mp4
 *.mov
 *.avi
 datasets/
