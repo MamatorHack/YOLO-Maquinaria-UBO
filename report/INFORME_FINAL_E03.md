@@ -4,7 +4,7 @@
 **Integrantes:** Mathis Marsault · Julien Martinat · Louis Maillet  
 **Docente:** Dr. Eliecer Peña Ancavil  
 **Fecha de entrega:** 7 de noviembre de 2026  
-**Grupo y módulo:** no comunicados en los materiales disponibles (identificadores oficiales por confirmar en el foro).
+**Grupo de trabajo:** Marsault · Martinat · Maillet (3 integrantes). **Módulo académico:** Machine Learning. *Identificador oficial del grupo: no comunicado.*
 
 ---
 
@@ -136,10 +136,10 @@ Se probaron **dos fotografías externas** al dataset, obtenidas de Pexels, con e
 |---|---|---|
 | Fotografía 1 | Pexels, Rohan Batra, imagen 40537857 | 1 `wheel loader` |
 | Fotografía 2 | Pexels, celal keser, imagen 36506004 | 1 `EXCAVATORS` y 1 `dump truck` |
-| Vídeo 1 | Archivo externo `16517436_3840_2160_30fps.mp4` | 245 fotogramas anotados |
-| Vídeo 2 | Archivo externo `16499298_3840_2160_30fps.mp4` | 199 fotogramas anotados |
+| Vídeo 1 | [Entrada 720p publicada por el equipo](https://github.com/MamatorHack/YOLO-Maquinaria-UBO/blob/main/assets/video_1_720p.mp4), original `16517436_3840_2160_30fps.mp4` | 245 fotogramas procesados |
+| Vídeo 2 | [Entrada 720p publicada por el equipo](https://github.com/MamatorHack/YOLO-Maquinaria-UBO/blob/main/assets/video_2_720p.mp4), original `16499298_3840_2160_30fps.mp4` | 199 fotogramas procesados |
 
-Ambos vídeos externos se transformaron de 4K a **720p / 10 fps** para limitar el uso de RAM de Colab, sin modificar el modelo. La inferencia se realizó con `stream=True` para no almacenar todas las predicciones en memoria. Se obtuvieron clips procesados de **24,5 y 19,9 segundos** aproximadamente. Los vídeos se introdujeron como material externo al entrenamiento; su independencia respecto del dataset se declara según el protocolo utilizado, sin equivaler a una comprobación exhaustiva de procedencia. Los dos clips anotados se guardaron en `results/video_1_streaming` y `results/video_2_streaming` en el archivo de evidencias, fuera del repositorio por su tamaño.
+Ambos vídeos externos se transformaron de 4K a **720p / 10 fps** para limitar el uso de RAM de Colab, sin modificar el modelo. La inferencia se realizó con `stream=True` para no almacenar todas las predicciones en memoria. Se obtuvieron clips procesados de **24,5 y 19,9 segundos** aproximadamente. Los vídeos se introdujeron como material externo al entrenamiento; su independencia respecto del dataset se declara según el protocolo utilizado, sin equivaler a una comprobación exhaustiva de procedencia. Los dos clips anotados se guardaron en `results/video_1_streaming` y `results/video_2_streaming` en el archivo de evidencias, fuera del repositorio por su tamaño. **Los MP4 accesibles desde la tabla son únicamente las entradas sin cajas YOLO**: no deben presentarse como vídeos anotados. La URL original de sus autores no está documentada.
 
 Estas pruebas muestran que el detector funciona en fuentes externas al dataset, pero las dos imágenes y dos vídeos **no constituyen una nueva prueba estadística independiente**. La iluminación, la distancia, el tamaño aparente de las máquinas y el punto de vista pueden modificar tanto las confianzas como la localización de las cajas. En particular, una predicción con confianza baja exige verificación humana.
 
@@ -160,7 +160,7 @@ Con más tiempo de GPU se podría ampliar el dataset con obras, cámaras y condi
 3. Ultralytics. *YOLO26 Documentation*. https://docs.ultralytics.com/models/yolo26/
 4. Pexels. Rohan Batra. Imagen 40537857. https://www.pexels.com/photo/heavy-machinery-at-indian-construction-site-40537857/
 5. Pexels. celal keser. Imagen 36506004. https://www.pexels.com/photo/dump-truck-and-excavator-at-construction-site-36506004/
-6. Material audiovisual externo empleado en el notebook: `16517436_3840_2160_30fps.mp4` (24,5 s) y `16499298_3840_2160_30fps.mp4` (19,9 s). Los nombres identifican los archivos efectivamente procesados, pero **no permiten verificar autoría, página de origen o licencia**; sus referencias bibliográficas completas no están acreditadas en los materiales del equipo.
+6. Material audiovisual externo empleado en el notebook: `16517436_3840_2160_30fps.mp4` (24,5 s) y `16499298_3840_2160_30fps.mp4` (19,9 s). Copias de entrada reproducibles: https://github.com/MamatorHack/YOLO-Maquinaria-UBO/blob/main/assets/video_1_720p.mp4 y https://github.com/MamatorHack/YOLO-Maquinaria-UBO/blob/main/assets/video_2_720p.mp4. Los identificadores no permiten verificar **autoría, fuente editorial ni licencia original**; estas referencias bibliográficas siguen incompletas.
 
 ---
 
