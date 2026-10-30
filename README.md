@@ -147,15 +147,15 @@ Se utilizaron dos fotografías de Pexels y dos vídeos externos al conjunto de e
 
 ### Vídeo 1 · Maquinaria de construcción (24,5 s)
 
-* **[▶ Reproducir / Descargar Vídeo 1 (MP4)](assets/video_1_720p.mp4)**
+![Vídeo 1 - Maquinaria de construcción](assets/video_1_720p.gif)
 
 ### Vídeo 2 · Excavadora en obra (19,9 s)
 
-* **[▶ Reproducir / Descargar Vídeo 2 (MP4)](assets/video_2_720p.mp4)**
+![Vídeo 2 - Excavadora en obra](assets/video_2_720p.gif)
 
-> **Distinción esencial:** los dos MP4 publicados en `assets/` son los **vídeos de entrada, redimensionados a 720p y 10 fps, SIN cajas YOLO**. El notebook ejecutado documenta la inferencia de 245 y 199 fotogramas; las **salidas con detecciones** se generaron en `results/video_1_streaming/` y `results/video_2_streaming/`, guardadas en el ZIP de resultados del equipo, pero no están publicadas en este repositorio. No se deben confundir originales y predicciones.
+> **Distinción esencial:** los dos archivos publicados en `assets/` son las **demostraciones visuales en GIF** de los vídeos de entrada procesados. El notebook ejecutado documenta la inferencia de 245 y 199 fotogramas; las **salidas con detecciones** se generaron en `results/video_1_streaming/` y `results/video_2_streaming/`, guardadas en el ZIP de resultados del equipo, pero no están publicadas en este repositorio. No se deben confundir originales y predicciones.
 
-La procedencia exacta y los derechos de reutilización de ambos vídeos deberán acreditarse en la entrega. Para la Evaluación 04 se usarán los **MP4 anotados**, no las entradas sin detections.
+La procedencia exacta y los derechos de reutilización de ambos vídeos deberán acreditarse en la entrega. Para la Evaluación 04 se usarán los resultados correspondientes.
 
 ### Evidencia visual de Test
 
