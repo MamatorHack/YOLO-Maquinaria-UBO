@@ -172,6 +172,38 @@ En la **Parte 12** del [notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat
 
 **Procedencia pendiente:** confirmar el enlace, la autoría y la licencia exacta de los dos MP4 realmente empleados. Sus nombres de archivo no son suficientes para acreditarlos.
 
+### 📦 Diferencia entre vídeos de entrada y vídeos con detecciones
+
+Al revisar la **Parte 12 del notebook E03 ejecutado**, se confirmó que los archivos `video_1_720p.mp4` y `video_2_720p.mp4` son **copias de entrada reducidas a 720p y 10 fps** mediante FFmpeg. **No son los renders anotados por YOLO**. Es importante no presentarlos como evidencia visual de las predicciones.
+
+| Secuencia | Vídeo de entrada (sin detecciones) | Salida generada por YOLO | Estado |
+|---|---|---|---|
+| **01** | `external/videos/video_1_720p.mp4` | `results/video_1_streaming/` · **245 frames** | Procesamiento confirmado en el notebook; MP4 anotado pendiente de publicación |
+| **02** | `external/videos/video_2_720p.mp4` | `results/video_2_streaming/` · **199 frames** | Procesamiento confirmado en el notebook; MP4 anotado pendiente de publicación |
+
+Los dos archivos de entrada 720p fueron facilitados por el equipo para documentar las demostraciones. **Estos archivos no se encuentran publicados en este repositorio**. El notebook registra que se guardaron las predicciones con `save=True`, pero para poder ver las cajas es necesario usar el archivo de salida **dentro de la carpeta `results/video_*_streaming/`**, no el MP4 de entrada.
+
+<details>
+<summary><strong>Cómo incorporar los dos vídeos anotados en este README (sin confundirlos con las entradas)</strong></summary>
+
+1. Extraer del ZIP de resultados `YOLO_E03_resultados.zip` los archivos de vídeo **generados por Ultralytics** en `results/video_1_streaming/` y `results/video_2_streaming/`.
+2. Si el render está en AVI u otro formato, convertirlo a MP4 H.264 con `ffmpeg -i entrada.avi -c:v libx264 -pix_fmt yuv420p -movflags +faststart salida.mp4`.
+3. Publicar **solo los renders anotados** como `assets/videos/video_1_yolo.mp4` y `assets/videos/video_2_yolo.mp4`. El `.gitignore` permite esta carpeta, pero sigue excluyendo otros MP4 y los pesos.
+4. Reemplazar este bloque por reproductores HTML cuando ambas rutas existan realmente en GitHub:
+
+```html
+<video controls width="100%" preload="metadata">
+  <source src="assets/videos/video_1_yolo.mp4" type="video/mp4">
+</video>
+<video controls width="100%" preload="metadata">
+  <source src="assets/videos/video_2_yolo.mp4" type="video/mp4">
+</video>
+```
+
+Los vídeos deben mostrar explícitamente las **cajas y clases predichas**; los originales no cumplen ese papel. Confirmar también que su publicación respete la licencia de los clips externos.
+
+</details>
+
 ### 🖼️ Evidencia visual que ya puede abrirse en GitHub
 
 [Galería real vs predicción](assets/figures/test_gallery.png) · [Detección correcta](assets/figures/test_correct.jpg) · [Falsa detección](assets/figures/test_false_positive.jpg) · [Matriz de confusión](assets/figures/test_confusion.jpg)
@@ -273,7 +305,7 @@ python scripts/preparar_dataset_sin_fugas.py \
 | Cuatro métricas de ambos modelos en Validation | Tabla comparativa | ✅ |
 | Selección anterior a Test y Test una sola vez | Notebook y resultados | ✅ |
 | TP / FP / FN en Validation con umbrales | 165 / 35 / 45 | ✅ |
-| Dos imágenes externas y dos vídeos ≥ 10 s | Procesamientos documentados | ✅; vídeo público pendiente |
+| Dos imágenes externas y dos vídeos ≥ 10 s | 245 y 199 frames; renders guardados según E03 | ⚠️ falta publicar los MP4 **anotados**, no los MP4 720p de entrada |
 | Tres errores cualitativos en Test | Confusión y falsa detección | ⚠️ falta un FN visual de Test |
 | Notebook, PDF y tres pesos propios | Notebook/PDF en GitHub; pesos en ZIP | ⚠️ entregar pesos al docente |
 | Grupo/módulo y procedencia exacta de los MP4 | Por confirmar | ⚠️ |
