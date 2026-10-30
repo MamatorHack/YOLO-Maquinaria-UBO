@@ -20,7 +20,7 @@
 
 ![mAP50-95 Test](https://img.shields.io/badge/mAP50--95%20Test-71.66%25-087F8C?style=for-the-badge) ![Precision Test](https://img.shields.io/badge/Precision%20Test-90.13%25-294C60?style=for-the-badge) ![Clases](https://img.shields.io/badge/Clases-3-3B8F6C?style=for-the-badge)
 
-**Ir a:** [Resultados](#resultados) · [Dataset](#dataset) · [Entrenamiento](#entrenamiento) · [Vídeos](#videos) · [Reproducción](#reproduccion) · [Checklist](#checklist)
+**Ir a:** [Resultados](#resultados) · [Dataset](#dataset) · [Entrenamiento](#entrenamiento) · [Vídeos](#videos) · [Reproducción y entrega](#reproduccion)
 
 [📓 Notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) · [📑 Informe PDF](report/Informe_Tecnico_E03_YOLO.pdf) · [📊 Métricas completas](docs/RESULTADOS_REALES_E03.md) · [🔍 Auditoría de datos](docs/AUDITORIA_DATASET.md)
 
@@ -132,88 +132,47 @@ flowchart LR
 | GPU | Tesla T4 | Tesla T4 |
 | Tiempo registrado | 213,76 s | 135,60 s |
 
+
 <a id="videos"></a>
-## 05 / Demostraciones externas · imágenes y vídeos
+## 05 / Demostraciones con material externo
 
-El detector elegido en Validation se aplicó a material **ajeno al dataset**, sin modificar los pesos. Estas demostraciones ilustran el uso del modelo, pero no son una evaluación estadística adicional: los vídeos no tienen anotaciones de referencia.
+Se utilizaron dos fotografías de Pexels y dos vídeos externos al conjunto de entrenamiento. Las imágenes y vídeos fueron procesados con el **modelo elegido en Validation**, sin reajustar sus pesos. Las pruebas externas son demostrativas; al no tener etiquetas de referencia, no constituyen nuevas métricas de Test.
 
-### 📸 Fotografías externas
+### Fotografías externas
 
-| Fuente | Detección documentada | Observación |
+| Fuente | Predicción observada | Interpretación |
 |---|---|---|
-| [Pexels · Rohan Batra · 40537857](https://www.pexels.com/photo/heavy-machinery-at-indian-construction-site-40537857/) | `wheel loader` · confianza ≈ 0,42 | Localización posible con confianza moderada-baja |
-| [Pexels · celal keser · 36506004](https://www.pexels.com/photo/dump-truck-and-excavator-at-construction-site-36506004/) | `EXCAVATORS` ≈ 0,68 y `dump truck` ≈ 0,28 | Posible confusión de objetos; la segunda predicción es débil |
+| [Rohan Batra, Pexels 40537857](https://www.pexels.com/photo/heavy-machinery-at-indian-construction-site-40537857/) | `wheel loader` (conf. ≈ 0,42) | Detección con confianza moderada |
+| [celal keser, Pexels 36506004](https://www.pexels.com/photo/dump-truck-and-excavator-at-construction-site-36506004/) | `EXCAVATORS` (≈ 0,68) y `dump truck` (≈ 0,28) | Posible confusión; la segunda predicción es débil |
 
-### 🎬 Vídeos procesados por nuestro YOLO
+### Vídeo 1 · maquinaria de construcción (24,5 s)
 
-En Colab, cada clip original 4K/30 fps se convirtió a **720p/10 fps** y se procesó con el modelo `modelo_elegido.pt`, `imgsz=416`, `conf=0.25`, `stream=True` y `save=True`. Las dos salidas anotadas se incluyeron en el ZIP de resultados del equipo.
-
-| Demostración | Archivo original | Duración | Fotogramas procesados | Carpeta del vídeo anotado |
-|---|---|---:|---:|---|
-| **🎞️ Vídeo 01 · maquinaria en obra** | `16517436_3840_2160_30fps.mp4` | **24,5 s** | **245** | `results/video_1_streaming/` |
-| **🎞️ Vídeo 02 · excavadora en obra** | `16499298_3840_2160_30fps.mp4` | **19,9 s** | **199** | `results/video_2_streaming/` |
-
-<details>
-<summary><strong>▶ Vídeo 01 · metodología y resultado</strong></summary>
-
-En la **Parte 12** del [notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) se muestra la importación, la conversión y la inferencia del primer vídeo. La salida anotada se guardó bajo `results/video_1_streaming/`.
-
-</details>
-
-<details>
-<summary><strong>▶ Vídeo 02 · metodología y resultado</strong></summary>
-
-En la **Parte 12** del [notebook ejecutado](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) se documentan también la conversión y la inferencia del segundo vídeo. La salida anotada se guardó bajo `results/video_2_streaming/`.
-
-</details>
-
-> [!IMPORTANT]
-> **Visionado de los dos vídeos:** el notebook y el ZIP `YOLO_E03_resultados.zip` del equipo registran los resultados, pero **los MP4 anotados no están alojados públicamente en este GitHub**. No se ofrece un reproductor ficticio ni un enlace roto. Para visualizarlos directamente desde el README, primero hay que publicar esos dos MP4 y añadir sus direcciones reales. El ZIP completo (≈ 508,61 MiB) tampoco está alojado en este repositorio.
-
-**Procedencia pendiente:** confirmar el enlace, la autoría y la licencia exacta de los dos MP4 realmente empleados. Sus nombres de archivo no son suficientes para acreditarlos.
-
-### 📦 Diferencia entre vídeos de entrada y vídeos con detecciones
-
-Al revisar la **Parte 12 del notebook E03 ejecutado**, se confirmó que los archivos `video_1_720p.mp4` y `video_2_720p.mp4` son **copias de entrada reducidas a 720p y 10 fps** mediante FFmpeg. **No son los renders anotados por YOLO**. Es importante no presentarlos como evidencia visual de las predicciones.
-
-| Secuencia | Vídeo de entrada (sin detecciones) | Salida generada por YOLO | Estado |
-|---|---|---|---|
-| **01** | `external/videos/video_1_720p.mp4` | `results/video_1_streaming/` · **245 frames** | Procesamiento confirmado en el notebook; MP4 anotado pendiente de publicación |
-| **02** | `external/videos/video_2_720p.mp4` | `results/video_2_streaming/` · **199 frames** | Procesamiento confirmado en el notebook; MP4 anotado pendiente de publicación |
-
-Los dos archivos de entrada 720p fueron facilitados por el equipo para documentar las demostraciones. **Estos archivos no se encuentran publicados en este repositorio**. El notebook registra que se guardaron las predicciones con `save=True`, pero para poder ver las cajas es necesario usar el archivo de salida **dentro de la carpeta `results/video_*_streaming/`**, no el MP4 de entrada.
-
-<details>
-<summary><strong>Cómo incorporar los dos vídeos anotados en este README (sin confundirlos con las entradas)</strong></summary>
-
-1. Extraer del ZIP de resultados `YOLO_E03_resultados.zip` los archivos de vídeo **generados por Ultralytics** en `results/video_1_streaming/` y `results/video_2_streaming/`.
-2. Si el render está en AVI u otro formato, convertirlo a MP4 H.264 con `ffmpeg -i entrada.avi -c:v libx264 -pix_fmt yuv420p -movflags +faststart salida.mp4`.
-3. Publicar **solo los renders anotados** como `assets/videos/video_1_yolo.mp4` y `assets/videos/video_2_yolo.mp4`. El `.gitignore` permite esta carpeta, pero sigue excluyendo otros MP4 y los pesos.
-4. Reemplazar este bloque por reproductores HTML cuando ambas rutas existan realmente en GitHub:
-
-```html
-<video controls width="100%" preload="metadata">
-  <source src="assets/videos/video_1_yolo.mp4" type="video/mp4">
+<video controls preload="metadata" width="100%" src="assets/video_1_720p.mp4">
+  Tu navegador puede abrir el archivo MP4 mediante el enlace siguiente.
 </video>
-<video controls width="100%" preload="metadata">
-  <source src="assets/videos/video_2_yolo.mp4" type="video/mp4">
+
+**[▶ Abrir / descargar vídeo 1 (MP4)](assets/video_1_720p.mp4)**
+
+### Vídeo 2 · excavadora en obra (19,9 s)
+
+<video controls preload="metadata" width="100%" src="assets/video_2_720p.mp4">
+  Tu navegador puede abrir el archivo MP4 mediante el enlace siguiente.
 </video>
-```
 
-Los vídeos deben mostrar explícitamente las **cajas y clases predichas**; los originales no cumplen ese papel. Confirmar también que su publicación respete la licencia de los clips externos.
+**[▶ Abrir / descargar vídeo 2 (MP4)](assets/video_2_720p.mp4)**
 
-</details>
+> **Distinción esencial:** los dos MP4 publicados en `assets/` son los **vídeos de entrada, redimensionados a 720p y 10 fps, SIN cajas YOLO**. El notebook ejecutado documenta la inferencia de 245 y 199 fotogramas; las **salidas con detecciones** se generaron en `results/video_1_streaming/` y `results/video_2_streaming/`, guardadas en el ZIP de resultados del equipo, pero no están publicadas en este repositorio. No se deben confundir originales y predicciones.
 
-### 🖼️ Evidencia visual que ya puede abrirse en GitHub
+La procedencia exacta y los derechos de reutilización de ambos vídeos deberán acreditarse en la entrega. Para la Evaluación 04 se usarán los **MP4 anotados**, no las entradas sin detecciones.
 
-[Galería real vs predicción](assets/figures/test_gallery.png) · [Detección correcta](assets/figures/test_correct.jpg) · [Falsa detección](assets/figures/test_false_positive.jpg) · [Matriz de confusión](assets/figures/test_confusion.jpg)
+### Evidencia visual de Test
 
-![Seis casos Test: etiquetas reales a la izquierda y predicciones a la derecha](assets/figures/test_gallery.png)
+![Galería de comparación: anotaciones reales frente a predicciones YOLO](assets/figures/test_gallery.png)
 
-*Son imágenes fijas del conjunto Test, no fotogramas de los vídeos externos.*
+*Comparación de seis imágenes de Test (izquierda: cajas reales; derecha: predicciones). Incluye aciertos, confusión de clase y falsa detección. El recuento de objetos perdidos está documentado por separado en Validation.*
 
 <a id="reproduccion"></a>
-## 06 / Cómo ejecutar (Google Colab T4)
+## 06 / Reproducción y entrega (Google Colab T4)
 
 1. Abrir [notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb) en [Google Colab](https://colab.research.google.com/).
 2. Ir a **Entorno de ejecución → Cambiar tipo de entorno de ejecución → T4 GPU**.
@@ -244,81 +203,11 @@ python scripts/preparar_dataset_sin_fugas.py \
   Excavators.v2-UBO-sin-fugas-evidentes.yolov8.zip
 ```
 
-## 07 / Estructura del repositorio
+### Archivos para la entrega
 
-```text
-.
-├── README.md
-├── notebooks/
-│   └── E03_YOLO_Marsault_Martinat_Maillet.ipynb  # notebook con resultados reales
-├── src/
-│   └── yolo_ubo.py                              # preparación, entrenamiento y evaluación
-├── scripts/
-│   ├── preparar_dataset_sin_fugas.py             # auditoría reproducible
-│   ├── build_report.py                           # compilación de PDF desde Markdown
-│   ├── generar_evidencia_errores.py              # paneles de errores
-│   └── generar_informe_pdf.py                    # generador alternativo
-├── assets/figures/
-│   ├── transfer_curves.png                       # training real, 8 épocas
-│   ├── fine_curves.png                           # fine tuning real, 5 épocas
-│   ├── test_gallery.png                          # real vs predicted, Test
-│   ├── test_correct.jpg
-│   ├── test_false_positive.jpg
-│   └── test_confusion.jpg
-├── docs/
-│   ├── AUDITORIA_DATASET.md
-│   ├── RESULTADOS_REALES_E03.md
-│   ├── FORO_INSCRIPCION.md
-│   ├── ENTREGA.md
-│   └── REVISION_MATERIALES_PROFESOR.md
-├── report/
-│   ├── INFORME_FINAL_E03.md                      # informe editable
-│   └── Informe_Tecnico_E03_YOLO.pdf              # informe A4 paginado
-├── tests/
-│   ├── test_yolo_ubo.py
-│   └── test_dataset_cleaning.py
-├── requirements.txt
-└── .github/workflows/
-    ├── validate.yml
-    ├── build-report.yml
-    └── report_preview.yml
-```
+- [Notebook ejecutado (.ipynb)](notebooks/E03_YOLO_Marsault_Martinat_Maillet.ipynb)
+- [Informe técnico en PDF](report/Informe_Tecnico_E03_YOLO.pdf)
+- **Pesos propios:** `transfer_learning.pt`, `fine_tuning.pt` y `modelo_elegido.pt` (entrega por aula virtual o Drive, fuera de GitHub).
+- **Dataset:** no se entrega el ZIP; la fuente, versión y licencia figuran arriba.
 
-<a id="checklist"></a>
-## 08 / Entrega, reproducibilidad y límites
-
-**Se entrega un único trabajo por equipo:**
-- Notebook `.ipynb` **ejecutado**, con sus salidas, participantes y ejecución ordenada.
-- **Informe PDF máximo 10 páginas** (no cuentan portada y anexos; las referencias sí cuentan).
-- Pesos entrenados por el equipo: `transfer_learning.pt`, `fine_tuning.pt`, `modelo_elegido.pt`. Si la plataforma no los admite, compartirlos mediante Google Drive con acceso al docente.
-- Enlace, versión, licencia y clases del dataset (no se entrega el ZIP de imágenes).
-
-**Límites reconocidos:** Test relativamente pequeño, solo 17 cajas de excavadoras, detecciones espurias entre clases visualmente similares y filtrado automático de casi duplicados imperfecto. En la galería hay confusiones y falsas detecciones; los FN se registran cuantitativamente en Validation, pero hace falta señalar un FN visual de Test específico para completar la evidencia cualitativa con máximo rigor. No se inventan métricas ni resultados.
-
-### ✅ Estado frente a la rúbrica de Evaluación 03
-
-| Requisito | Evidencia | Estado |
-|---|---|---|
-| Dataset, fuente, versión, licencia, tres clases y particiones | Secciones 01 y 03 | ✅ |
-| Corrección de fugas antes de entrenar | Auditoría y script | ✅ |
-| Transfer learning y fine tuning con GPU, tiempos y curvas | Secciones 02 y 04 | ✅ |
-| Cuatro métricas de ambos modelos en Validation | Tabla comparativa | ✅ |
-| Selección anterior a Test y Test una sola vez | Notebook y resultados | ✅ |
-| TP / FP / FN en Validation con umbrales | 165 / 35 / 45 | ✅ |
-| Dos imágenes externas y dos vídeos ≥ 10 s | 245 y 199 frames; renders guardados según E03 | ⚠️ falta publicar los MP4 **anotados**, no los MP4 720p de entrada |
-| Tres errores cualitativos en Test | Confusión y falsa detección | ⚠️ falta un FN visual de Test |
-| Notebook, PDF y tres pesos propios | Notebook/PDF en GitHub; pesos en ZIP | ⚠️ entregar pesos al docente |
-| Grupo/módulo y procedencia exacta de los MP4 | Por confirmar | ⚠️ |
-
-**Antes de entregar:** completar grupo y módulo, acreditar las URL de origen de los MP4, identificar un FN concreto en Test sin repetir la evaluación, hacer accesibles los vídeos anotados y los tres pesos, y revisar el PDF final de forma manual.
-
-Este checklist revisa las **evidencias documentadas**; no equivale a inspeccionar físicamente los MP4 del ZIP. [Checklist detallado](docs/ENTREGA.md).
-
----
-
-<div align="center">
-
-**Equipo Machine Learning UBO · 2026**  
-*Resultados de un experimento académico real, no evaluación de un producto industrial.*
-
-</div>
+**Límite importante:** las predicciones visualizadas en la galería muestran una confusión de clase y un falso positivo. No se afirma haber documentado un falso negativo visual específico de **Test**: el conteo FN disponible corresponde a **Validation**. El informe explica esta limitación con transparencia.
